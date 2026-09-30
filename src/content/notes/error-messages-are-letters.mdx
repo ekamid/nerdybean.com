@@ -1,0 +1,66 @@
+---
+status: draft
+slug: error-messages-are-letters
+title: Error messages are letters to strangers
+category: Engineering
+date: 8 Sep 2026
+read: 5 min
+excerpt: >-
+  Somewhere, someone tired and in a hurry will read the sentence you wrote at
+  the end of a long afternoon. Write it for them.
+tags:
+  - software
+  - ux
+  - people
+intro: >-
+  Most of the text I have written professionally was never meant to be read in
+  a good moment. It shows up when a payment fails, a login expires, or a map
+  refuses to load on a train. Error messages are the only letters we write
+  knowing the reader will be frustrated when they open them.
+sections:
+  - heading: What the reader actually needs
+    paragraphs:
+      - >-
+        A useful error answers three questions, roughly in this order: what
+        happened, whether anything was lost, and what to do next. "Something
+        went wrong" answers none of them. "We couldn't send your message
+        because you're offline. It's saved and will send when you reconnect"
+        answers all three in one breath.
+      - >-
+        The internal reason, a timeout or an expired token, matters to me and
+        almost never to them. The job is translation: turn the system's
+        vocabulary into the person's situation.
+  - heading: Errors are part of the design, not the leftovers
+    paragraphs:
+      - >-
+        On mobile projects I learned that the unhappy paths deserve design time
+        as early as the happy ones. Poor signal, a permission denied, a server
+        that answers slowly: these are not edge cases on a phone, they are
+        Tuesday. If the only screen designed properly is the one where
+        everything works, the product has been designed for a world that does
+        not exist.
+      - >-
+        A good rule I now follow: before calling a feature done, break it on
+        purpose. Switch off the network halfway through, deny the permission,
+        submit the form twice. Then read what the app says back, out loud, as
+        if you were the person on the train.
+  - heading: The empathy is in the details
+    paragraphs:
+      - >-
+        Keep the user's input when something fails. Say whether retrying is
+        safe. Avoid blame, even gentle blame; "invalid input" tells someone
+        they are the problem. Give support a code they can quote, and give the
+        person a sentence they can understand.
+      - >-
+        None of this is glamorous. But the moments people remember about
+        software are often the moments it failed, and how it treated them when
+        it did.
+pullQuote: >-
+  An error message is written once by someone calm and read a thousand times
+  by someone who isn't.
+backlinks:
+  - label: HandyX
+    href: /projects/handyx
+  - label: Confidence is not the same as being right
+    href: /garden/calibrated-confidence
+---

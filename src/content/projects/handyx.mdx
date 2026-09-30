@@ -1,0 +1,51 @@
+---
+status: draft
+slug: handyx
+title: HandyX
+stage: built
+tech: React Native · Expo · APIs · maps
+summary: >-
+  A mobile app for booking local services, where authentication, messaging,
+  maps, and real-time updates all had to feel simple on a small screen.
+question: How do you make a busy service feel calm on a phone?
+why: >-
+  Booking help at home involves a lot of anxious waiting: who is coming, when,
+  and whether anyone has actually seen your request. The aim was to remove as
+  much of that uncertainty as the interface could.
+worked: >-
+  Cross-platform mobile development, API integration, maps and location,
+  in-app messaging, real-time status, release and deployment.
+---
+
+## Where it began
+
+HandyX started from a simple observation: most of the stress of arranging a
+service is not the service itself, but the silence in between. Did the request
+go through? Has someone accepted it? Are they on the way? A good app should
+answer those questions before people have to ask them.
+
+## The awkward middle
+
+Each feature was manageable on its own. The hard part was making them work
+together on real phones, in real conditions:
+
+- **Authentication** that stays out of the way, but never leaves someone
+  logged into the wrong state.
+- **Messaging** that survives a weak signal and doesn't lose what someone
+  typed.
+- **Maps and location** that are useful without being battery-hungry or
+  intrusive.
+- **Real-time updates** that reflect what is actually happening, not what
+  happened thirty seconds ago.
+
+Most of the effort went into the unglamorous paths: offline states, retries,
+loading screens, and error messages written for someone in a hurry.
+
+## What I learned
+
+- Design the unhappy paths as carefully as the happy one. On mobile, poor
+  connectivity is the normal case.
+- Real-time features are mostly about honesty: showing when data is stale is
+  better than pretending it is fresh.
+- Shipping is its own skill. Builds, store reviews, and release notes deserve
+  planning, not a Friday afternoon.

@@ -1,0 +1,44 @@
+---
+status: draft
+slug: coffee-farming-assistant
+title: AI Coffee Farming Assistant
+stage: in progress
+tech: computer vision · sensor data · decision support
+summary: >-
+  An applied AI concept that helps coffee farmers reason about plant health by
+  combining photos of leaves and plants with simple sensor readings and field
+  observations.
+question: Can useful AI start from what a farmer can already see?
+why: >-
+  Much agricultural AI assumes expensive equipment and reliable connectivity.
+  Many small farms have neither. I wanted to explore something that starts
+  with a phone camera and the farmer's own observations, and treats their
+  experience as data rather than something to replace.
+worked: >-
+  Problem framing, research into crop conditions, computer-vision
+  experimentation, combining image and sensor signals, and designing outputs
+  that explain their uncertainty.
+---
+
+## Where it began
+
+Coffee is a daily ritual for me and a livelihood for millions of farmers.
+That imbalance stayed with me during my AI studies: most of the attention goes
+to the cup, very little to the plant.
+
+## Design principles
+
+- **Start from the farmer's view.** Photos taken on an ordinary phone, in real
+  light, are the primary input, not lab-quality images.
+- **Assist, don't decide.** The system suggests what might be happening and
+  why, and leaves the decision to the person who knows the field.
+- **Be honest about uncertainty.** A confident wrong answer about crop disease
+  is worse than "I'm not sure, check these leaves again in a few days".
+- **Work with poor connectivity.** Anything that only works with fast internet
+  won't work where it is needed most.
+
+## What I'm learning
+
+Building a model is the smaller part of the problem. Framing the right
+question, finding representative data, and presenting results that people can
+trust and act on are much harder, and much more interesting.

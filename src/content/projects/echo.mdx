@@ -1,0 +1,43 @@
+---
+status: draft
+slug: echo
+title: Echo
+stage: experiment
+tech: location · memory · geofencing · notifications
+summary: >-
+  A small experiment in leaving notes attached to places rather than times, so
+  a message waits for you until you return to where it matters.
+question: What if a reminder could wait for the right place instead of the right time?
+why: >-
+  Some thoughts only make sense in a particular location: a note for the next
+  visit to a shop, a memory tied to a park bench, advice for the next time you
+  are at the trailhead. Calendars are bad at this. Places are good at it.
+worked: >-
+  Prototyping, geofencing and location permissions, notification design, and
+  thinking carefully about when not to interrupt someone.
+---
+
+## Where it began
+
+I noticed that I kept writing notes like "remember this next time you're
+here", and then forgetting them, because nothing reminded me when I was
+actually there. Echo is an attempt to let the place do the reminding.
+
+## The hard part is restraint
+
+Technically, triggering a notification when someone enters an area is not
+difficult. Deciding whether it *should* fire is much harder.
+
+- A note that arrives at the wrong moment is noise.
+- Too many notes in one area become a list, and lists get ignored.
+- Location permissions are personal. The app has to earn them and explain
+  exactly why it needs them.
+
+The design direction became: fewer, quieter notifications, and notes that feel
+discovered rather than delivered.
+
+## Still open
+
+Echo is an experiment rather than a product. The open questions are more
+interesting to me than the code: how should a memory feel when a device
+brings it back, and when is it kinder to let a place stay silent?
