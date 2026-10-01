@@ -164,6 +164,8 @@
   box-shadow: 0 1px 0 color-mix(in oklab, var(--foreground) 5%, transparent);
   backdrop-filter: blur(18px);
 }
+@keyframes preview-in { from { opacity: 0; transform: translateY(4px); } }
+@keyframes sheet-in { from { transform: translateY(100%); } }
 @utility rise-in { animation: rise .6s cubic-bezier(.32,.72,0,1) both; }
 @utility contour-lines {
   background-image: repeating-radial-gradient(ellipse at 76% 50%, transparent 0 26px, color-mix(in oklab, var(--primary) 10%, transparent) 27px 28px);

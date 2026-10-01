@@ -64,6 +64,7 @@ export const personJsonLd = {
   name: site.author.name,
   url: absoluteUrl("/"),
   jobTitle: site.author.jobTitle,
+  sameAs: [site.social.linkedin],
   address: { "@type": "PostalAddress", addressLocality: "Cardiff", addressCountry: "GB" },
   knowsAbout: ["Software engineering", "Artificial intelligence", "Machine learning", "Mobile applications", "Web applications"],
 };

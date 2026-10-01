@@ -20,6 +20,9 @@ export const site = {
     jobTitle: "Software developer & MSc Artificial Intelligence student",
     location: "Cardiff, Wales",
   },
+  social: {
+    linkedin: "https://www.linkedin.com/in/ebrahimkhalil",
+  },
   keywords: [
     "Ebrahim Khalil",
     "software developer",

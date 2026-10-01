@@ -3,6 +3,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import type { LinkPreview } from "@/lib/link-previews";
+import { PreviewLink } from "./link-preview";
 import { Meta } from "./primitives";
 
 export { Meta, Tags } from "./primitives";
@@ -43,8 +45,10 @@ export function Cover({ image, imageAlt, imageCaption, priority = false }: { ima
   </figure>;
 }
 
-/** Freeform MDX body (Markdown below the frontmatter). Rendered on the server; ships no JS. */
-export function Body({ source, className = "mt-10" }: { source: string; className?: string }) {
+/** Freeform MDX body (Markdown below the frontmatter). Rendered on the server; only preview links hydrate. */
+export function Body({ source, className = "mt-10", previews }: { source: string; className?: string; previews?: Record<string, LinkPreview> }) {
   if (!source.trim()) return null;
-  return <div className={`editor-prose ${className}`}><ReactMarkdown remarkPlugins={[remarkGfm]}>{source}</ReactMarkdown></div>;
+  // With `previews`, links in the text show where they go on hover (or tap, on touch screens).
+  const components = previews && { a: ({ href, children }: { href?: string; children?: ReactNode }) => (href ? <PreviewLink href={href} preview={previews[href]}>{children}</PreviewLink> : <a>{children}</a>) };
+  return <div className={`editor-prose ${className}`}><ReactMarkdown remarkPlugins={[remarkGfm]} {...(components && { components })}>{source}</ReactMarkdown></div>;
 }

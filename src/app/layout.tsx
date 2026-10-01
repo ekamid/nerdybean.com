@@ -46,18 +46,15 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#eef1f4" },
-    { media: "(prefers-color-scheme: dark)", color: "#171c22" },
-  ],
+  themeColor: "#171c22",
 };
 
-// Runs before first paint so the saved / preferred theme never flashes.
-const themeScript = `(function(){try{var s=localStorage.getItem("ek-theme");var d=s?s==="dark":matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.classList.toggle("dark",d)}catch(e){}})()`;
+// Dark by default; runs before first paint so a saved choice never flashes.
+const themeScript = `(function(){try{document.documentElement.classList.toggle("dark",localStorage.getItem("ek-theme")!=="light")}catch(e){}})()`;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en-GB" className={`${inter.variable} ${lora.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="en-GB" className={`dark ${inter.variable} ${lora.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
