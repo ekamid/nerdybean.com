@@ -1,6 +1,6 @@
 import { randomBytes } from "node:crypto";
 import { NextResponse } from "next/server";
-import { cookieOptions, requireEnv } from "@/lib/admin/session";
+import { cookieOptions, publicUrl, requireEnv } from "@/lib/admin/session";
 
 /** Step 1 of signing in: send the browser to GitHub. `state` is a random value we check on the way back. */
 export function GET(request: Request) {
@@ -19,7 +19,7 @@ export function GET(request: Request) {
   const state = randomBytes(16).toString("hex");
   const github = new URL("https://github.com/login/oauth/authorize");
   github.searchParams.set("client_id", clientId);
-  github.searchParams.set("redirect_uri", new URL("/admin/callback", request.url).toString());
+  github.searchParams.set("redirect_uri", publicUrl("/admin/callback", request).toString());
   github.searchParams.set("state", state);
   github.searchParams.set("allow_signup", "false");
   // No `scope`: the token can only read your public profile, which is all we need.

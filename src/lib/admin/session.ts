@@ -3,6 +3,7 @@ import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { site } from "@/lib/site";
 
 /** The only GitHub account allowed into /admin. */
 export const adminLogin = "ekamid";
@@ -17,6 +18,14 @@ export const adminLogin = "ekamid";
  */
 const cookieName = "admin_session";
 const maxAge = 60 * 60 * 24 * 7; // a week
+
+/**
+ * The address people use for the site, e.g. https://nerdybean.com. On Netlify `request.url` holds the
+ * internal deploy address (…--nerdybean.netlify.app), which GitHub wouldn't accept as the callback,
+ * so production uses the site URL. In development it's wherever the dev server runs.
+ */
+export const publicUrl = (path: string, request: Request) =>
+  new URL(path, process.env.NODE_ENV === "production" ? site.url : request.url);
 
 export function requireEnv(name: string) {
   const value = process.env[name];

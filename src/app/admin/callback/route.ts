@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { adminLogin, cookieOptions, requireEnv, sessionCookie } from "@/lib/admin/session";
+import { adminLogin, cookieOptions, publicUrl, requireEnv, sessionCookie } from "@/lib/admin/session";
 
 /** Step 2 of signing in: GitHub sends the browser back here with a one-time code. */
 export async function GET(request: NextRequest) {
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
       client_id: requireEnv("GITHUB_CLIENT_ID"),
       client_secret: requireEnv("GITHUB_CLIENT_SECRET"),
       code,
-      redirect_uri: new URL("/admin/callback", request.url).toString(),
+      redirect_uri: publicUrl("/admin/callback", request).toString(),
     }),
   });
   const { access_token: token } = (await tokenResponse.json()) as { access_token?: string };
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     return new Response("This admin is private.", { status: 403 });
   }
   // The token isn't kept; from here on the signed session cookie says who you are.
-  const response = NextResponse.redirect(new URL("/admin", request.url));
+  const response = NextResponse.redirect(publicUrl("/admin", request));
   response.cookies.set(sessionCookie(user.login));
   response.cookies.set("admin_oauth_state", "", { ...cookieOptions, maxAge: 0 });
   return response;

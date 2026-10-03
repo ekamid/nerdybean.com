@@ -1,8 +1,13 @@
 import path from "node:path";
 import type { NextConfig } from "next";
 
+// The public site URL, fixed at build time: Netlify's `URL` is only guaranteed during the build,
+// and server code needs it at runtime too (canonical links, the admin's GitHub callback).
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.URL;
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  ...(siteUrl && { env: { NEXT_PUBLIC_SITE_URL: siteUrl } }),
   poweredByHeader: false,
   turbopack: { root: path.resolve(import.meta.dirname) },
   // Admin saves send uploaded images through a server action. Netlify Functions accept up to 6 MB.
