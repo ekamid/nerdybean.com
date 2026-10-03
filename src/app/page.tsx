@@ -26,38 +26,49 @@ export default function Home() {
     <main className="mx-auto max-w-[1200px] px-4 sm:px-6">
       <section className="grid grid-cols-12 items-end gap-8 pb-12 pt-14 sm:pt-20">
         <div className="col-span-12 rise-in lg:col-span-7">
-          <p className="mb-5 font-mono text-[11px] tracking-[0.25em] text-primary">
-            Finished work belongs here, so do the failures
-          </p>
-          <h1 className="text-balance font-display text-[clamp(2.6rem,6vw,5rem)] font-extrabold leading-[.95]">
-            Learning in public, one note at a time.
+          <h1 className="text-balance font-display text-[clamp(2.4rem,6vw,4.25rem)] font-extrabold leading-[.95] tracking-tight">
+            Thoughts, experiments, failures, and{" "}
+            <span className="text-primary">things that worked.</span>
           </h1>
-          <p className="mt-6 max-w-[46ch] text-[17px] leading-relaxed text-muted-foreground">
-            I’m Ebrahim, a software developer studying for an MSc in Artificial Intelligence in
-            Wales. This is where I keep what I’m learning: about machines, about people, and about
-            how far my legs will carry me.
+          <p className="mt-7 max-w-[48ch] text-[17px] leading-relaxed text-muted-foreground">
+            Gathered by an intergalactic wanderer, joyfully delving into programming, philosophy,
+            psychology, literature, and art. Some may find these interests unconventional, even
+            unimportant; I delight in the stories, ideas, and discoveries that capture my curiosity
+            and expand my understanding of the universe.
           </p>
         </div>
         <div className="col-span-12 rise-in lg:col-span-5 [animation-delay:120ms]">
           <div className="surface rounded-lg p-5">
-            <div className="mb-4 flex justify-between">
+            <div className="mb-4 flex items-center justify-between border-b border-border pb-3">
               <Meta>RIGHT NOW</Meta>
-              <span className="font-mono text-[10px] text-primary">updated as it changes</span>
+              <span className="flex items-center gap-1.5 font-mono text-[10px] text-primary">
+                <span
+                  className="size-1.5 animate-pulse rounded-full bg-primary"
+                  aria-hidden="true"
+                />
+                live-ish
+              </span>
             </div>
-            <ul className="space-y-2.5 font-mono text-xs">
+            <dl className="space-y-2.5 font-mono text-xs">
               {[
-                "Living in Cardiff, Wales",
-                "MSc Artificial Intelligence student",
-                "3+ years shipping web & mobile apps",
-                "Training for long, slow distances",
-                "Reading, one chapter at a time",
-              ].map((x) => (
-                <li className="flex items-center gap-2.5" key={x}>
-                  <span className="size-1.5 rounded-full bg-primary" aria-hidden="true" />
-                  {x}
-                </li>
+                ["Based", "Cardiff, South Wales"],
+                ["Studying", "MSc Artificial Intelligence"],
+                ["Learning", "Data engineering & preprocessing, plus the shiny new AI stack"],
+                ["Building", "HandyX, with the team, still shipping"],
+                ["Shipped", "3+ years of web & mobile apps"],
+                ["Surviving", "Odd jobs around the UK, for now"],
+                ["Running", "2–3 days a week, mountains when I can"],
+                ["Brewing", "AeroPress, beans from local roasters"],
+                ["Reading", "Several books at once, as usual"],
+              ].map(([label, value]) => (
+                <div className="flex items-baseline gap-4" key={label}>
+                  <dt className="w-20 shrink-0 text-[10px] uppercase tracking-[0.15em] text-primary">
+                    {label}
+                  </dt>
+                  <dd>{value}</dd>
+                </div>
               ))}
-            </ul>
+            </dl>
           </div>
         </div>
       </section>
@@ -136,7 +147,8 @@ export default function Home() {
             </div>
             <GardenMap graph={graph} variant="compact" />
             <p className="mt-3 text-[13px] text-muted-foreground">
-              Every note points to others. Hover a dot to trace its links, click a dot for its details, drag to rearrange or pan, ⌘/ctrl + scroll to zoom, or{" "}
+              Every note points to others. Hover a dot to trace its links, click a dot for its
+              details, drag to rearrange or pan, ⌘/ctrl + scroll to zoom, or{" "}
               <Link href="/garden#map" className="text-primary hover:underline">
                 open the full map
               </Link>

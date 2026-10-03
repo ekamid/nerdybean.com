@@ -67,6 +67,17 @@ export type Book = Cover & Publishable & {
   tags: string[];
   body: string;
 };
+/** One entry in the coffee log: a dated note about a brew, a bean or a change to a recipe. */
+export type CoffeeLog = Publishable & {
+  title: string;
+  date: string;
+  /** ISO date (YYYY-MM-DD) derived from `date`. */
+  isoDate: string;
+  /** Brew method, e.g. "AeroPress". */
+  method: string;
+  beans?: string;
+  body: string;
+};
 export type Travel = Cover & Publishable & {
   place: string;
   detail: string;
@@ -171,12 +182,22 @@ const allBooks = cache((): Book[] =>
     return { ...b, tags: b.tags ?? [], sections: b.sections ?? [], quotes: b.quotes ?? [], links: b.links ?? [], ...publishable(raw) } as Book;
   }),
 );
+const allCoffeeLogs = cache((): CoffeeLog[] =>
+  readCollection("coffee")
+    .map((raw) => {
+      const l = raw as unknown as CoffeeLog;
+      const isoDate = toDate(l.date).toISOString().slice(0, 10);
+      return { ...l, isoDate, ...publishable(raw, isoDate) };
+    })
+    .sort((a, b) => (a.isoDate < b.isoDate ? 1 : -1)),
+);
 const allTravels = cache((): Travel[] => readCollection("travels").map((raw) => ({ ...(raw as unknown as Travel), ...publishable(raw) })));
 
 export const getNotes = cache(() => visible(allNotes()));
 export const getProjects = cache(() => visible(allProjects()));
 export const getBooks = cache(() => visible(allBooks()));
 export const getTravels = cache(() => visible(allTravels()));
+export const getCoffeeLogs = cache(() => visible(allCoffeeLogs()));
 
 export const getNote = (slug: string) => getNotes().find((n) => n.slug === slug);
 export const getProject = (slug: string) => getProjects().find((p) => p.slug === slug);

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Meta, PageIntro } from "@/components/site/page";
+import Link from "next/link";
+import { Meta } from "@/components/site/page";
 import { JsonLd } from "@/components/site/json-ld";
 import { breadcrumbJsonLd, pageMetadata, personId } from "@/lib/seo";
 import { absoluteUrl } from "@/lib/site";
@@ -11,20 +12,53 @@ export const metadata: Metadata = pageMetadata({
   type: "profile",
 });
 
-const interests = ["artificial intelligence", "machine learning", "software engineering", "mobile applications", "web applications", "backend systems", "APIs", "developer tooling", "automation", "human–computer interaction"];
+const pieces = [
+  { href: "/garden", label: "Garden", note: "where I think out loud" },
+  { href: "/projects", label: "Projects", note: "what I’ve built, and what I’ve broken" },
+  { href: "/books", label: "Books", note: "what I’m reading, and what stayed with me" },
+  { href: "/coffee", label: "Coffee", note: "how I brew, and where coffee comes from" },
+  { href: "/travel", label: "Travel", note: "places I’ve wandered, on foot when I can" },
+];
 
 export default function AboutPage() {
   return <main className="mx-auto max-w-[1200px] px-4 sm:px-6">
     <JsonLd data={[{ "@type": "ProfilePage", url: absoluteUrl("/about"), mainEntity: { "@id": personId } }, breadcrumbJsonLd([{ name: "About", path: "/about" }])]} />
-    <PageIntro eyebrow="ABOUT / THE LONGER VERSION" title="Developer, student, slow runner."><p>I’m Ebrahim Khalil. I build software, I’m studying artificial intelligence in Cardiff, and I spend my free time on long runs, mountain trails and books.</p></PageIntro>
-    <div className="grid grid-cols-12 gap-8 py-12">
-      <aside className="col-span-12 lg:col-span-3"><div className="surface sticky top-24 rounded-lg p-5"><Meta>COORDINATES</Meta><p className="mt-3 font-mono text-xs">51.4816° N<br />3.1791° W</p><div className="mt-6 border-t border-dashed border-border pt-4"><Meta>STATUS</Meta><p className="mt-2 text-sm">studying AI, open to interesting problems, usually training for something</p></div></div></aside>
-      <article className="col-span-12 space-y-12 text-lg leading-8 lg:col-span-9">
-        <section><Meta>BACKGROUND</Meta><h2 className="mt-3 font-display text-3xl font-bold">From shipping apps to studying AI</h2><p className="mt-4">My first degree was in Computer Science and Engineering. After that I spent more than three years building web and mobile applications: backend integrations, performance work, reliability, user experience, and supporting the people who used what we shipped, often with distributed, remote teams.</p><p className="mt-4">That work left me with a question I wanted to study properly: how do we build intelligent systems people can actually trust? That’s why I moved to Wales for an MSc in Artificial Intelligence.</p></section>
-        <section><Meta>ENGINEERING</Meta><h2 className="mt-3 font-display text-3xl font-bold">What I care about in software</h2><p className="mt-4">Systems that fail gracefully, interfaces that respect people’s time, and AI that’s honest about what it doesn’t know. I like the unglamorous parts: error states, offline behaviour, and working out why something broke.</p><ul className="mt-6 flex flex-wrap gap-2" aria-label="Interests">{interests.map((i) => <li className="rounded-full border border-border px-3 py-1 font-mono text-xs text-muted-foreground" key={i}>{i}</li>)}</ul></section>
-        <section><Meta>BEYOND CODE</Meta><h2 className="mt-3 font-display text-3xl font-bold">Away from the keyboard</h2><p className="mt-4">I’ve finished an Ironman 70.3 and trekked in the Himalayas, and most weeks I run along the Welsh coast in whatever weather turns up. I read slowly and mostly literary fiction, and I brew coffee as if it were a lab experiment.</p><p className="mt-4">None of that is separate from the engineering. Pacing, patience and knowing when to turn back are as useful at a desk as on a mountain.</p></section>
-        <section className="surface rounded-lg p-6"><Meta>HOW I TRY TO WORK</Meta><blockquote className="mt-5 font-display text-2xl font-bold leading-snug">Start before conditions are perfect, pace yourself for the whole distance, and be honest about how sure you are.</blockquote><p className="mt-4 text-sm text-muted-foreground">I don’t always manage it. Writing this garden is how I keep track.</p></section>
-      </article>
-    </div>
+    <section className="grid grid-cols-12 items-end gap-8 border-b border-border pb-12 pt-14 sm:pt-20">
+      <div className="col-span-12 rise-in lg:col-span-8">
+        <h1 className="text-balance font-display text-[clamp(2.4rem,6vw,4.25rem)] font-extrabold leading-[.95] tracking-tight">
+          About me? <span className="text-primary">Still working on it.</span>
+        </h1>
+        <p className="mt-7 max-w-[48ch] text-[17px] leading-relaxed text-muted-foreground">
+          I’m Ebrahim. I’m not nerdy enough to have figured myself out yet, so there isn’t much to
+          say here. Whatever I learn along the way ends up somewhere on this site.
+        </p>
+      </div>
+      <div className="col-span-12 rise-in lg:col-span-4 [animation-delay:120ms]">
+        <div className="surface rounded-lg p-5 font-mono text-xs">
+          <Meta>LATELY</Meta>
+          <ul className="mt-3 space-y-2">
+            {["Thinking about what’s next", "Figuring things out", "Wondering about most things"].map((x) => (
+              <li key={x}>{x}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section className="py-12">
+      <Meta>FIND ME IN PIECES</Meta>
+      <ul className="mt-6 divide-y divide-border border-y border-border">
+        {pieces.map((p) => (
+          <li key={p.href}>
+            <Link href={p.href} className="group flex items-baseline justify-between gap-6 py-5">
+              <span className="font-display text-2xl font-bold transition-colors group-hover:text-primary">{p.label}</span>
+              <span className="flex items-baseline gap-3 text-right font-mono text-xs text-muted-foreground">
+                {p.note}
+                <span className="text-primary transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
   </main>;
 }
