@@ -9,7 +9,7 @@ function resolveSiteUrl(): string {
 export const site = {
   url: resolveSiteUrl(),
   name: "Ebrahim Khalil",
-  title: "Ebrahim Khalil — ",
+  title: "Ebrahim Khalil — Digital Garden",
   shortTitle: "Ebrahim Khalil",
   description:
     "Ebrahim Khalil’s digital garden: essays on AI and software engineering, project write-ups, reading notes, and lessons from running, mountains and coffee.",
