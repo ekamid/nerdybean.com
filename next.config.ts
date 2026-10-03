@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   turbopack: { root: path.resolve(import.meta.dirname) },
+  // Admin saves send uploaded images through a server action. Netlify Functions accept up to 6 MB.
+  experimental: { serverActions: { bodySizeLimit: "6mb" } },
   images: {
     formats: ["image/avif", "image/webp"],
   },

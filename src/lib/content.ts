@@ -97,7 +97,7 @@ export type SearchItem = {
 const contentRoot = path.join(process.cwd(), "src", "content");
 const frontmatterPattern = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/;
 
-type Raw = Record<string, unknown> & { body: string; file: string };
+type Raw = Record<string, unknown> & { slug: string; body: string; file: string };
 
 function readCollection(folder: string): Raw[] {
   const dir = path.join(contentRoot, folder);
@@ -109,7 +109,8 @@ function readCollection(folder: string): Raw[] {
       const match = source.match(frontmatterPattern);
       if (!match) throw new Error(`${folder}/${file} is missing YAML frontmatter.`);
       const data = (parse(match[1] ?? "") ?? {}) as Record<string, unknown>;
-      return { ...data, body: (match[2] ?? "").trim(), file: `${folder}/${file}` };
+      // The file name is the slug, as written by the CMS (Keystatic).
+      return { ...data, slug: file.replace(/\.mdx?$/, ""), body: (match[2] ?? "").trim(), file: `${folder}/${file}` };
     });
 }
 
@@ -120,6 +121,9 @@ export function toDate(value: string): Date {
 }
 
 const isoPattern = /^\d{4}-\d{2}-\d{2}$/;
+
+/** Publish dates are stored as YYYY-MM-DD by the CMS; older files may say "9 Mar 2026". */
+const isoOf = (value: unknown) => (value instanceof Date ? value : toDate(String(value))).toISOString().slice(0, 10);
 const updateKinds: readonly UpdateKind[] = ["revised", "continued", "corrected"];
 
 /** Format an ISO date (YYYY-MM-DD) the same way publish dates are written, e.g. "1 Oct 2026". */
@@ -162,6 +166,11 @@ function publishable(raw: Raw, publishedIso?: string): Publishable {
   return { status: status as Status, updates, ...(updates[0] && { lastUpdated: updates[0].date }) };
 }
 
+/** Runs the build's checks on one entry, so /admin can refuse a save that would break the build. */
+export function checkEntry(file: string, data: Record<string, unknown>) {
+  publishable({ ...data, slug: "", body: "", file }, data["date"] ? isoOf(data["date"]) : undefined);
+}
+
 /** Drafts are hidden everywhere. Set SHOW_DRAFTS=true locally to preview them. */
 const visible = <T extends { status: Status }>(items: T[]) =>
   process.env.SHOW_DRAFTS === "true" ? items : items.filter((item) => item.status === "published");
@@ -169,9 +178,9 @@ const visible = <T extends { status: Status }>(items: T[]) =>
 const allNotes = cache((): Note[] =>
   readCollection("notes")
     .map((raw) => {
-      const n = raw as unknown as Partial<Note> & { date: string };
-      const isoDate = toDate(n.date).toISOString().slice(0, 10);
-      return { ...n, tags: n.tags ?? [], sections: n.sections ?? [], backlinks: n.backlinks ?? [], isoDate, ...publishable(raw, isoDate) } as Note;
+      const n = raw as unknown as Partial<Note>;
+      const isoDate = isoOf(n.date);
+      return { ...n, date: formatIsoDate(isoDate), tags: n.tags ?? [], sections: n.sections ?? [], backlinks: n.backlinks ?? [], isoDate, ...publishable(raw, isoDate) } as Note;
     })
     .sort((a, b) => (a.isoDate < b.isoDate ? 1 : -1)),
 );
@@ -186,8 +195,8 @@ const allCoffeeLogs = cache((): CoffeeLog[] =>
   readCollection("coffee")
     .map((raw) => {
       const l = raw as unknown as CoffeeLog;
-      const isoDate = toDate(l.date).toISOString().slice(0, 10);
-      return { ...l, isoDate, ...publishable(raw, isoDate) };
+      const isoDate = isoOf(l.date);
+      return { ...l, date: formatIsoDate(isoDate), isoDate, ...publishable(raw, isoDate) };
     })
     .sort((a, b) => (a.isoDate < b.isoDate ? 1 : -1)),
 );

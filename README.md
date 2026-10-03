@@ -29,15 +29,53 @@ npm run dev
 
 ## Content
 
-Add an `.mdx` file to one of:
+### Admin
+
+Write, edit and publish at `/admin`. Sign in with GitHub; only the `ekamid` account gets in.
+
+- **Locally** (`npm run dev`), saving writes the file straight into `src/content` (and images into
+  `public/images`). Review and commit with git as usual.
+- **In production**, saving makes one commit on `master` with the entry and its images, through the
+  GitHub API. Netlify sees the push and redeploys, so changes are live in a minute or two.
+- **Save draft** keeps an entry off the live site; **Publish** sets `status: published`.
+
+How it fits together:
+
+| File | Job |
+| --- | --- |
+| `src/lib/admin/collections.ts` | What can be edited: one entry per content folder, one field per frontmatter key. The form is drawn from this. Add a field here to make it editable. |
+| `src/lib/admin/session.ts` | GitHub sign-in check and the signed session cookie |
+| `src/app/admin/login`, `callback`, `logout` | The GitHub OAuth sign-in steps |
+| `src/lib/admin/storage.ts` | Reading and saving files: local disk in development, GitHub commits in production |
+| `src/lib/admin/entries.ts` | Turning files into form data and back (YAML frontmatter + Markdown body) |
+| `src/app/admin/actions.ts` | Save and delete. Runs the same checks as the build, so a save can't break a deploy. |
+| `src/components/admin/entry-form.tsx` | The editing form |
+
+One-time setup:
+
+1. Create two GitHub OAuth Apps (GitHub → Settings → Developer settings → OAuth Apps):
+   one with callback `http://localhost:3000/admin/callback`, one with
+   `https://<your-domain>/admin/callback`.
+2. Create a fine-grained personal access token (Settings → Developer settings → Personal access
+   tokens → Fine-grained) with access to only this repo and **Contents: Read and write**.
+3. Locally, put the dev OAuth App's ID and secret plus an `ADMIN_SESSION_SECRET` in `.env.local`.
+4. In Netlify (Site configuration → Environment variables), set the production OAuth App's
+   `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`, a different `ADMIN_SESSION_SECRET`, and
+   `GITHUB_CONTENT_TOKEN`. Redeploy.
+
+### Files
+
+Entries can also be written by hand. Add an `.mdx` file to one of:
 
 - `src/content/notes` → `/garden/<slug>`
 - `src/content/books` → `/books/<slug>`
 - `src/content/projects` → `/projects/<slug>`
-- `src/content/travels` → listed on `/travel`
+- `src/content/travels` → listed on `/travel` (in file name order)
+- `src/content/coffee` → listed on `/coffee` (`.md`)
+
+The file name is the slug. Dates are written as `YYYY-MM-DD`.
 
 Metadata goes in the YAML frontmatter; any Markdown below the frontmatter is rendered as the body.
-The `/editor` page (not indexed) helps draft and download these files.
 
 ### Draft / published
 

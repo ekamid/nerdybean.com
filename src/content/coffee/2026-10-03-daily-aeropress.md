@@ -1,7 +1,7 @@
 ---
 status: draft
 title: Settled on a daily AeroPress recipe
-date: 3 Oct 2026
+date: 2026-10-03
 method: AeroPress
 beans: Local roastery
 ---
