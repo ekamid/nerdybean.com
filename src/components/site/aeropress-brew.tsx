@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { GooseneckPour } from "./gooseneck-pour";
 
 const steps = [
   { label: "Dose", detail: "15 g of coffee", ms: 2200 },
@@ -12,6 +13,12 @@ const steps = [
 ] as const;
 
 const total = steps.reduce((sum, s) => sum + s.ms, 0);
+const stepStart = (i: number) => steps.slice(0, i).reduce((sum, s) => sum + s.ms, 0);
+// When the kettle pours: the bloom (10–40% of step 3) and the top-up (first 85% of step 4).
+const pours: [number, number][] = [
+  [stepStart(2) + 0.1 * steps[2].ms, stepStart(2) + 0.4 * steps[2].ms],
+  [stepStart(3), stepStart(3) + 0.85 * steps[3].ms],
+];
 const clamp = (n: number) => Math.min(1, Math.max(0, n));
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const ease = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
@@ -91,7 +98,6 @@ export function AeropressBrew() {
   const coffee = 15 * dose;
   const water = index < 2 ? 0 : index === 2 ? 45 * clamp((bloom - 0.1) / 0.3) : 45 + 205 * ease(clamp(pour / 0.85));
   const bloomSeconds = index === 2 ? Math.round(45 * bloom) : index > 2 ? 45 : 0;
-  const pouring = (index === 2 && bloom > 0.1 && bloom < 0.4) || (index === 3 && pour < 0.85);
   // The grinder lifts away once grinding is done, before the first pour.
   const grinderAway = index >= 2 ? clamp(bloom / 0.1) + (index > 2 ? 1 : 0) : 0;
   const crank = grind * 6 * Math.PI * 2;
@@ -121,9 +127,6 @@ export function AeropressBrew() {
               <path d="M78 262 h84 l-8 46 h-68 z" />
             </clipPath>
           </defs>
-
-          {/* Kettle stream */}
-          <line x1="120" y1="40" x2="120" y2={liquidTop - 2} stroke="var(--brew-water)" strokeWidth="3" strokeLinecap="round" strokeDasharray="6 4" strokeDashoffset={-elapsed / 20} opacity={pouring ? 0.9 : 0} style={{ transition: "opacity .25s" }} />
 
           {/* Liquid, grounds and beans inside the chamber */}
           <g clipPath={`url(#${id}-chamber)`}>
@@ -180,6 +183,9 @@ export function AeropressBrew() {
           <rect x={chamber.x - 6} y={chamber.top - 4} width={chamber.w + 12} height={4} rx="2" fill="currentColor" opacity=".35" />
           <rect x={chamber.x - 4} y={chamber.bottom} width={chamber.w + 8} height={7} rx="2" fill="currentColor" opacity=".55" />
           {[1, 2, 3, 4].map((m) => <line key={m} x1={chamber.x + chamber.w - 10} x2={chamber.x + chamber.w} y1={chamber.bottom - m * 28} y2={chamber.bottom - m * 28} stroke="currentColor" strokeOpacity=".25" />)}
+
+          {/* Gooseneck kettle and its stream; lands on the water, or on the coffee bed before there is any */}
+          <GooseneckPour elapsed={elapsed} pours={pours} surface={Math.min(liquidTop, chamber.bottom - grounds)} chamberClip={`${id}-chamber`} id={id} />
 
           {/* Drips */}
           {index === 5 && press < 0.98 && [0, 1, 2].map((i) => {
